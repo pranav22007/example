@@ -1,4 +1,4 @@
-const CACHE_NAME = 'library-app-v1';
+const CACHE_NAME = 'library-app-v3';
 const ASSETS = [
     './',
     './index.html',
