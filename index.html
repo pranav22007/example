@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2563eb">
+    <title>Elite Library Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="container">
+        <!-- Floating Nav -->
+        <div class="nav-menu">
+            <button class="nav-btn active" onclick="switchTab('floor-plan-tab', this)">
+                <span>🪑</span> Floor Plan
+            </button>
+            <button class="nav-btn" onclick="switchTab('students-tab', this)">
+                <span>👥</span> Students
+            </button>
+            <button class="nav-btn" onclick="switchTab('notif-tab', this)">
+                <span>🔔</span> Alerts <span id="notif-badge" class="badge" style="display:none">0</span>
+            </button>
+        </div>
+
+        <div id="floor-plan-tab" class="tab-content active">
+            <div class="header">
+                <div>
+                    <h1>Library Map</h1>
+                    <p style="margin:4px 0 0 0; color:#64748b; font-size:14px; font-weight:500;">200 Professional Workspaces</p>
+                </div>
+                <div class="legend" style="display:flex; gap:12px;">
+                    <div style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600;">
+                        <div style="width:12px; height:12px; background:#f1f5f9; border-radius:4px; border:1px solid #e2e8f0;"></div> Available
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600;">
+                        <div style="width:12px; height:12px; background:#2563eb; border-radius:4px;"></div> Occupied
+                    </div>
+                </div>
+            </div>
+
+            <div class="floor-plan">
+                <div class="library-map" id="library-map"></div>
+            </div>
+        </div>
+
+        <div id="students-tab" class="tab-content">
+            <div class="header">
+                <h1>Active Students</h1>
+            </div>
+            <div class="student-grid" id="student-list-grid">
+                <!-- Cards injected here -->
+            </div>
+        </div>
+
+        <div id="notif-tab" class="tab-content">
+            <div class="header">
+                <h1>Action Required</h1>
+                <p style="color:#64748b; font-size:14px;">Memberships expiring in 3 days or less.</p>
+            </div>
+            <div id="notification-list" class="student-grid"></div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="assign-modal" class="modal">
+        <div class="modal-content">
+            <div style="padding: 24px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                <h2 style="margin:0; font-size:1.25rem;">Register Seat #<span id="assign-seat-number"></span></h2>
+            </div>
+            <div style="padding: 24px;">
+                <form id="assign-form">
+                    <div class="form-group">
+                        <label>Student Full Name</label>
+                        <input type="text" id="name" placeholder="Enter name..." required>
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label>Plan Type</label>
+                            <select id="plan_type" required>
+                                <option value="full_time">Full (₹1000)</option>
+                                <option value="half_time">Half (₹500)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount Paid</label>
+                            <input type="number" id="amount_paid" required min="0">
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:12px; margin-top:12px;">
+                        <button type="submit" class="btn btn-primary">Save Member</button>
+                        <button type="button" class="btn" style="background:#f1f5f9; color:#64748b;" onclick="closeModals()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <div id="seat-info-header" style="padding: 24px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                <h2 style="margin:0; font-size:1.25rem;">Workspace Info</h2>
+            </div>
+            <div style="padding: 24px;">
+                <div id="seat-info-details"></div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:24px;">
+                    <button id="btn-remove-user" class="btn" style="background:#fee2e2; color:#991b1b;">Vacate Seat</button>
+                    <button type="button" class="btn" style="background:#f1f5f9; color:#64748b;" onclick="closeModals()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>

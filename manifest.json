@@ -1,0 +1,16 @@
+{
+  "name": "Elite Library Manager",
+  "short_name": "LibraryApp",
+  "description": "Professional 200-seat library management system.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#2c3e50",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2232/2232688.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
