@@ -92,9 +92,9 @@
 
             <div id="students-tab" class="tab-content">
                 <div class="header">
-                    <h1>All Students</h1>
-                    <div class="search-container">
-                        <input type="text" id="search-input" placeholder="🔍 Search by name or mobile..." oninput="updateMap()">
+                    <h1 style="margin:0;">All Students</h1>
+                    <div class="search-container" style="margin:0; flex:1; max-width:400px;">
+                        <input type="text" id="search-input" placeholder="🔍 Search by name or mobile..." oninput="updateMap()" style="padding:10px 16px;">
                     </div>
                 </div>
                 <div class="student-grid" id="student-list-grid"></div>
@@ -173,6 +173,7 @@
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:24px;">
                     <button id="btn-remove-user" class="btn" style="background:#fee2e2; color:#991b1b;">Vacate Seat</button>
                     <button type="button" class="btn" style="background:#f1f5f9; color:#64748b;" onclick="closeModals()">Close</button>
+                    <button type="button" onclick="debugSetExpire()" class="btn" style="grid-column: span 2; margin-top: 10px; background: #fff7ed; color: #c2410c; font-size: 11px; border: 1px dashed #fdba74;">🛠️ DEBUG: Set to 2 Days Left</button>
                 </div>
             </div>
         </div>

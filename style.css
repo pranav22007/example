@@ -47,6 +47,13 @@ body {
     .nav-menu {
         position: static;
         margin-bottom: 30px;
+        max-width: fit-content;
+        padding: 8px 16px;
+    }
+    .header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
 }
 
@@ -65,6 +72,7 @@ body {
     align-items: center;
     gap: 4px;
     font-size: 11px;
+    position: relative;
 }
 
 .nav-btn.active {
@@ -75,7 +83,7 @@ body {
 
 .badge {
     position: absolute;
-    top: 4px;
+    top: -2px;
     right: 15%;
     background: var(--danger);
     color: white;

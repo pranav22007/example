@@ -100,6 +100,12 @@ function showInfoModal(data) {
                 <div style="font-size:10px; color:rgba(0,0,0,0.4); font-weight:700;">PAYMENT FOR ${data.month_for}</div>
                 <div style="font-weight:800;">${balance <= 0 ? 'Fully Paid' : 'Pending: ₹'+balance}</div>
             </div>
+
+            <div style="display:flex; gap:8px;">
+                <a href="https://wa.me/91${data.mobile}?text=${encodeURIComponent(`Hi ${data.name}, your membership at Elite Library expires in ${daysRemaining} days. Please renew to continue.`)}" target="_blank" class="btn" style="flex:1; padding:10px; font-size:12px; background:#25d366; color:white; text-decoration:none; text-align:center; border-radius:8px; font-weight:700;">WhatsApp</a>
+                <a href="sms:${data.mobile}?body=${encodeURIComponent(`Hi ${data.name}, your membership at Elite Library expires in ${daysRemaining} days. Please renew to continue.`)}" class="btn" style="flex:1; padding:10px; font-size:12px; background:#3b82f6; color:white; text-decoration:none; text-align:center; border-radius:8px; font-weight:700;">SMS</a>
+            </div>
+
             <div style="max-height:100px; overflow-y:auto; background:#f1f5f9; border-radius:8px; padding:8px;">
                 <div style="font-size:10px; font-weight:800; color:#94a3b8; margin-bottom:4px;">PAYMENT HISTORY</div>
                 ${data.history.map(h => `<div class="history-item">₹${h.amt} paid on ${h.date}</div>`).join('')}
@@ -148,6 +154,16 @@ function closeModals() {
     assignForm.reset();
 }
 
+function debugSetExpire() {
+    const data = seatDataMap[currentSeatNumber];
+    if (!data) return;
+    const d = new Date();
+    d.setDate(d.getDate() - 28);
+    data.join_date = d.toISOString().split('T')[0];
+    saveAndRefresh();
+    showInfoModal(data);
+}
+
 function switchTab(tabId, btn) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -181,6 +197,21 @@ function updateMap() {
             const daysLeft = Math.max(0, 30 - daysUsed);
             const balance = (data.plan_type === 'full_time' ? 1000 : 500) - data.amount_paid;
 
+            const msg = encodeURIComponent(`Hi ${data.name}, your membership for Seat #${i} at Elite Library expires in ${daysLeft} days. Please renew to continue. Thank you!`);
+            const waLink = `https://wa.me/91${data.mobile}?text=${msg}`;
+            const smsLink = `sms:${data.mobile}?body=${msg}`;
+
+            const actionButtons = daysLeft <= 3 ? `
+                <div style="display:flex; gap:8px; margin-top:12px;">
+                    <a href="${waLink}" target="_blank" class="btn" style="flex:1; padding:6px; font-size:10px; background:#25d366; color:white; text-decoration:none; text-align:center; display:flex; align-items:center; justify-content:center; gap:4px;">
+                        <span>💬</span> WhatsApp
+                    </a>
+                    <a href="${smsLink}" class="btn" style="flex:1; padding:6px; font-size:10px; background:#3b82f6; color:white; text-decoration:none; text-align:center; display:flex; align-items:center; justify-content:center; gap:4px;">
+                        <span>✉️</span> SMS
+                    </a>
+                </div>
+            ` : '';
+
             const cardHtml = `
                 <div class="student-card">
                     <div style="display:flex; justify-content:space-between; align-items:start;">
@@ -198,6 +229,7 @@ function updateMap() {
                         </div>
                         <button class="btn" style="padding:6px 12px; font-size:11px; background:#f1f5f9;" onclick="handleSeatClick(${i})">Edit</button>
                     </div>
+                    ${actionButtons}
                 </div>
             `;
             
@@ -205,7 +237,8 @@ function updateMap() {
 
             if (daysLeft <= 3) {
                 alertCount++;
-                notifList.innerHTML += cardHtml.replace('student-card', 'student-card style="border-left:4px solid #ef4444"');
+                const alertCard = cardHtml.replace('student-card', 'student-card style="border-left:4px solid #ef4444; background:#fff5f5"');
+                notifList.innerHTML += alertCard;
             }
         } else {
             el.classList.remove('occupied');
